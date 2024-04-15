@@ -179,6 +179,7 @@ const categoriesError = document.getElementById('categoriesError');
 const uploadImgContainer = document.getElementById('UploadImageContainer');
 const addProjectLogo = document.querySelector('addProjectLogo');
 const addProjectLabel = document.querySelector('addProjectLabel');
+const sectionGallery = document.querySelector('.gallery');
 
 
 function main(){
