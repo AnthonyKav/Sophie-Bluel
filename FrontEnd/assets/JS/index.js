@@ -197,10 +197,14 @@ function main(){
 
 /////////////////////// OUVRIR ET FERMER LA MODALE /////////////////////////////
 
+// Se déclanche lorsque l'élement OpenBtn est cliqué 
 openBtn.onclick = function() { 
-modal.style.display = "block"; 
-modal1.style.display = "flex";//au clic il n'y a toujours que la modal1 qui s'ouvre
-modal2.style.display = "none";
+// Cette ligne définit que l'élément avec l'ID "modal" aura un style d'affichage de "block", ce qui le rendra visible.
+  modal.style.display = "block"; 
+  // Cette ligne définit que l'élément avec l'ID "modal1" aura un style d'affichage de "flex", ce qui le rendra visible.
+  modal1.style.display = "flex";//au clic il n'y a toujours que la modal1 qui s'ouvre
+  // Cette ligne définit que l'élément avec l'ID "modal2" aura un style d'affichage de "none", ce qui le rendra invisible.
+  modal2.style.display = "none";  
 }
 
 // au clic sur la croix, la modale se ferme
@@ -231,25 +235,34 @@ getGalleryProjects();
 //////////////// AFFICHER LES PROJETS DANS LA MODALE ///////////////////////////
 
 async function displayProjectsModal(){
-
+  //Attend la récupération des projets de la galerie depuis la fonction async appelée "getGalleryProjects()".
   const modalProjects = await getGalleryProjects();
-  
+  // Cette boucle parcourt chaque projet récupéré dans "modalProjects"
   for (let i = 0; i < modalProjects.length; i++) {
   
     // Création de Figure
     const figure = modalProjects[i];
     const projectFigure = document.createElement("figure");
+    //  ajoute un attribut "data-id" à la figure, avec une valeur unique pour chaque projet.
     projectFigure.dataset.id = "Figure"+ i;
+    // Ajoute la classe CSS ProjectFigureModal à la nouvelle Figure 
     projectFigure.classList.add("projectFigureModal");
   
     //Création de l'icône de suppression
+        // crée un nouvel élément HTML "div" pour contenir l'icône de suppression.
     const containerDelete = document.createElement('div');
+    //  ajoute une classe CSS "containerDelete" au conteneur de l'icône.
     containerDelete.classList.add("containerDelete");
+     // crée un nouvel élément HTML "img" pour représenter l'icône de suppression
     const deleteIcon = document.createElement('img');
+    // définit la source de l'image de l'icône de suppression.
     deleteIcon.src="./assets/icons/trash-can-solid.svg";
+    //ajoute une classe CSS "deleteIcon" à l'icône de suppression.
     deleteIcon.classList.add("deleteIcon");
 
     //Ajout d'un id unique à chaque icone de suppression
+
+     //attribue un ID unique à chaque icône de suppression, en utilisant l'indice de la boucle.
     deleteIcon.id = `deleteIcon-${i}`;
     deleteIcon.alt = "icone suppression";
 
@@ -283,16 +296,22 @@ async function displayProjectsModal(){
 displayProjectsModal();
 
 ////////////////// SUPPRIMER UN PROJET DEPUIS L'API //////////////////////
-
+// prend en pâramètre l'id de la figure à suprimer 
 deleteFigureFromAPI = async (id) => {
+  //récupère l'élément HTML avec l'ID "deleteSuccess", qui sera utilisé pour afficher un message de succès.
 const deleteSuccess = document.getElementById('deleteSuccess');
+ // récupère le token stocké dans le localStorage du navigateur.
   const token = window.localStorage.getItem("token")//.replace(/['"]+/g, '');
+  //effectue une requête HTTP DELETE asynchrone vers l'API, en utilisant l'ID de la figure à supprimer.
   const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+     // Le header de la requête inclue le type de contenu (application/json) et le token
+    // Le body de la requête est vide, car il s'agit d'une suppression.
       method: "DELETE",
       headers: { 
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
        },
+      
       body: ''
     });
 
@@ -300,6 +319,8 @@ const deleteSuccess = document.getElementById('deleteSuccess');
     throw new Error('Request failed');
   }
   else {
+    // si la réponse est un succès , un message est affiché dans la console , la galerie est vidée et la fonction 
+    // async displayProjects est appellé pour la mettre à jour 
     console.log('Photo supprimée avec succès');
     deleteSuccess.innerHTML = "Photo supprimée avec succès";
     sectionGallery.innerHTML = "";
@@ -329,22 +350,29 @@ switchModal();
 
 //fleche retour pour revenir à la modal1
 
+// récupère l'element HTML avec l'ID Arrowback 
 const arrowBack = document.getElementById('arrowBack')                       
-
+// Cette ligne ajoute un écouteur d'événement "click" à l'élément "arrowBack".
+// Lorsque l'utilisateur clique sur cet élément, la fonction "switchModal2()" sera appelée.
 arrowBack.addEventListener ("click", switchModal2)
 function switchModal2() {
     const modal1 = document.querySelector('.modal1')
     const modal2 = document.querySelector('.modal2')
-  
+  // Cette condition vérifie si la modale 2 est actuellement affichée 
     if (modal2.style.display === 'flex') {
+      // Si c'est le cas, cette ligne cache la modale 2 en définissant son style d'affichage à 'none'
         modal2.style.display = 'none'
+         // affiche la modale 1 en définissant son style d'affichage à 'flex'.
         modal1.style.display = 'flex'
+        //efface le contenu de l'élément HTML avec l'ID "nameError".
            nameError.innerHTML = "";
            categoriesError.innerHTML = "";
            deleteSuccess.innerHTML = "";
         formUpload.reset();
     } else {
+      // affiche la modale 2 en définissant son style d'affichage à 'flex'
         modal2.style.display = 'flex'
+      // cache la modale 1 en définissant son style d'affichage à 'none'
         modal1.style.display = 'none'
 }
 }
@@ -377,28 +405,42 @@ categories.then((data) => {
 
 //////////upload et preview de l'image
 
+// Cette fonction est exécutée lorsque le contenu HTML de la page a fini de charger.
 document.addEventListener("DOMContentLoaded", function () {
  
 /////// Preview image
 
+ // ajoute un eventListener "change" à l'élément HTML avec l'ID "addProjectInput".
+  // Lorsque l'utilisateur sélectionne un fichier dans cet élément, la fonction suivante est exécutée.
   addProjectInput.addEventListener('change', function (event) {
+    // récupère le premier fichier sélectionné par l'utilisateur dans l'élément "addProjectInput".
     const selectedFile = event.target.files[0];
-
+    // Cette condition vérifie si un fichier a bien été sélectionné.
     if (selectedFile) {
+       // crée un nouvel objet "FileReader" qui permet de lire le contenu du fichier sélectionné.
       const reader = new FileReader();
+      // ajoute un écouteur d'événement "load" à l'objet "reader".
+        // Lorsque le fichier a fini d'être lu, la fonction suivante est exécutée.
       reader.addEventListener('load', function () {
+        //crée un nouvel element img pour afficher le preview 
         const imgPreview = document.createElement('img');
+        // définit la source de l'image à l'URL du fichier lu.
         imgPreview.src = this.result;
+        //vide le contenu de l'élément HTML avec la classe "previewContainer".
         previewContainer.innerHTML = '';
+        //ajoute l'élément "imgPreview" en tant qu'enfant de l'élément "previewContainer"
         previewContainer.appendChild(imgPreview);
+        //ajoute la classe CSS "previewImage" à l'élément "imgPreview".
         imgPreview.classList.add("previewImage");
       });
+      // lit le contenu du fichier sélectionné et le convertit en une URL de données.
       reader.readAsDataURL(selectedFile);
       
     }
   });
-  
+   // Cette fonction est définie pour afficher le contenu par défaut du conteneur d'aperçu.
   function displayPreviewContainer() {
+    //  définit le contenu HTML du conteneur d'aperçu, qui inclut une icône, un label et un champ de fichier caché.
     previewContainer.innerHTML =  `     <span><img src="assets/icons/addProject_Img.svg"  class="addProjectLogo" alt="modalLogo"></span>
     <label for="addProjectInput" class="addProjectLabel">+ Ajouter une photo</label>
     <input type="file" name="addProjectInput" id="addProjectInput" class="hidden">
@@ -410,8 +452,9 @@ document.addEventListener("DOMContentLoaded", function () {
 ///////// UPLOAD PROJECT
 
   async function uploadProject(event){
+    //empêche le comportement par défaut du formulaire (rechargement de la page)
    event.preventDefault();
-
+    // ces lignes récupèrent les valeurs des différents champs
     const projectName = document.getElementById("projectName").value;
     const projectCategory = document.getElementById("projectCategories").value;
     const selectedFile = addProjectInput.files[0];
@@ -449,7 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (response.ok) {
       
-         console.log("it works! youhouuuu");
+         console.log("it works! Bravo !");
          nameError.innerHTML = "Image ajoutée avec succès";
 
          // apres Upload d une image le formulaire est vide
@@ -474,7 +517,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //upload form
  const formUpload = document.querySelector(".form_upload");
  if (formUpload) {
-  formUpload.addEventListener("submit", uploadProject);///// Le displayProjects doit se faire sur l'ID du projet
+  formUpload.addEventListener("submit", uploadProject);
  sectionGallery.innerHTML = "";
 
 
