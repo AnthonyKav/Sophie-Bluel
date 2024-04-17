@@ -107,6 +107,7 @@ async function init() {
   await displayButtonsCategorys(categories);
   // Ajoute le filtrage par catégorie
   await filterCategory(works);
+  await displayProjectsModal()
 }
 
 // Initialise l'application
@@ -180,6 +181,11 @@ const uploadImgContainer = document.getElementById('UploadImageContainer');
 const addProjectLogo = document.querySelector('addProjectLogo');
 const addProjectLabel = document.querySelector('addProjectLabel');
 const sectionGallery = document.querySelector('.gallery');
+const validateBtn = document.getElementById('validateBtn');
+const formUpload = document.querySelector('.form_upload'); 
+const projectName = document.getElementById("projectName")
+const projectCategory = document.getElementById("projectCategories")
+
 
 
 function main(){
@@ -229,7 +235,7 @@ async function getGalleryProjects() {
   const response = await fetch ("http://localhost:5678/api/works");
 return await response.json();
 }
-getGalleryProjects();
+
 
 
 //////////////// AFFICHER LES PROJETS DANS LA MODALE ///////////////////////////
@@ -293,11 +299,11 @@ async function displayProjectsModal(){
   }
 }
 
-displayProjectsModal();
+
 
 ////////////////// SUPPRIMER UN PROJET DEPUIS L'API //////////////////////
 // prend en pâramètre l'id de la figure à suprimer 
-deleteFigureFromAPI = async (id) => {
+constdeleteFigureFromAPI = async (id) => {
   //récupère l'élément HTML avec l'ID "deleteSuccess", qui sera utilisé pour afficher un message de succès.
 const deleteSuccess = document.getElementById('deleteSuccess');
  // récupère le token stocké dans le localStorage du navigateur.
@@ -324,8 +330,10 @@ const deleteSuccess = document.getElementById('deleteSuccess');
     console.log('Photo supprimée avec succès');
     deleteSuccess.innerHTML = "Photo supprimée avec succès";
     sectionGallery.innerHTML = "";
-    await displayProjects();
-
+    const { works, categories } = await fetchData();
+         // Affiche toutes les œuvres par défaut
+         await affichageWorks(works);
+    
   }
 }
 
@@ -346,7 +354,7 @@ function switchModal() {
     }
 }
 
-switchModal();
+
 
 //fleche retour pour revenir à la modal1
 
@@ -403,10 +411,7 @@ categories.then((data) => {
 });
 
 
-//////////upload et preview de l'image
-
-// Cette fonction est exécutée lorsque le contenu HTML de la page a fini de charger.
-document.addEventListener("DOMContentLoaded", function () {
+//////////upload et preview de l'image 
  
 /////// Preview image
 
@@ -497,9 +502,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
          // apres Upload d une image le formulaire est vide
          categoriesError.innerHTML = "";
+         // reset image ici 
          formUpload.reset();
          sectionGallery.innerHTML = "";
-         await displayProjects();
+         const { works, categories } = await fetchData();
+         // Affiche toutes les œuvres par défaut
+         await affichageWorks(works);
+         
 
          // apres Upload d une image le previewContainer est vidé et remplacé par le logo
         displayPreviewContainer();
@@ -515,7 +524,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }}
 
   //upload form
- const formUpload = document.querySelector(".form_upload");
+ 
  if (formUpload) {
   formUpload.addEventListener("submit", uploadProject);
  sectionGallery.innerHTML = "";
@@ -524,15 +533,11 @@ document.addEventListener("DOMContentLoaded", function () {
 // displayProjects();
 } else {
   console.error("Nope");
-}}
-);
+}
+;
 
 ///tant que le formulaire n'est pas rempli, le bouton de validation est desactive///
 
-const validateBtn = document.getElementById('validateBtn');
-const formUpload = document.querySelector('.form_upload'); 
-const projectName = document.getElementById("projectName")
-const projectCategory = document.getElementById("projectCategories")
 
 // Fonction pour vérifier si tous les champs sont remplis
 function checkInputs() {
