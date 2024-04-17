@@ -477,9 +477,10 @@ input[type="text"]{
     font-weight: bold;
     width: 100%;
     margin-top: 10px;;
-    margin-bottom: 20px;;
+    margin-bottom: 20px;
+	text-align: center;
 }
-.validateBtn{
+.validateBtn {
 	border-radius: 60px;
 	background-color:#1D6154;
 	width: 237px;

@@ -239,24 +239,7 @@ return await response.json();
 
 
 //////////////// AFFICHER LES PROJETS DANS LA MODALE ///////////////////////////
-async function deleteFigureFromAPI(figureId) {
-  try {
-    const response = await fetch(`http://localhost:5678/api/works/${figureId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
 
-    if (response.ok) {
-      console.log('Figure supprimée avec succès');
-    } else {
-      console.error('Erreur lors de la suppression de la figure');
-    }
-  } catch (error) {
-    console.error('Erreur lors de la suppression de la figure:', error);
-  }
-}
 
 async function displayProjectsModal(){
   //Attend la récupération des projets de la galerie depuis la fonction async appelée "getGalleryProjects()".
@@ -318,7 +301,7 @@ async function displayProjectsModal(){
 
 ////////////////// SUPPRIMER UN PROJET DEPUIS L'API //////////////////////
 // prend en pâramètre l'id de la figure à suprimer 
-constdeleteFigureFromAPI = async (id) => {
+const deleteFigureFromAPI = async (id) => {
   //récupère l'élément HTML avec l'ID "deleteSuccess", qui sera utilisé pour afficher un message de succès.
 const deleteSuccess = document.getElementById('deleteSuccess');
  // récupère le token stocké dans le localStorage du navigateur.
