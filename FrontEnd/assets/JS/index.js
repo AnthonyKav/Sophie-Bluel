@@ -239,6 +239,24 @@ return await response.json();
 
 
 //////////////// AFFICHER LES PROJETS DANS LA MODALE ///////////////////////////
+async function deleteFigureFromAPI(figureId) {
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${figureId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.ok) {
+      console.log('Figure supprimée avec succès');
+    } else {
+      console.error('Erreur lors de la suppression de la figure');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la figure:', error);
+  }
+}
 
 async function displayProjectsModal(){
   //Attend la récupération des projets de la galerie depuis la fonction async appelée "getGalleryProjects()".
@@ -272,10 +290,7 @@ async function displayProjectsModal(){
     deleteIcon.id = `deleteIcon-${i}`;
     deleteIcon.alt = "icone suppression";
 
-/**
-   //Remarque: si j'upload plusieurs fois la meme image, en cliquant sur l'icone de suppression d'une de ces images
-   //c'est la derniere image qui est supprimee
-**/
+
     
     // Supprimer un projet de la galerie depuis la modale en cliquant sur l'icône de suppression
     deleteIcon.addEventListener('click', async (event) => {
