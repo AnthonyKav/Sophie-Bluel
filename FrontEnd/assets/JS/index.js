@@ -1,10 +1,30 @@
 // Définit l'adresse où fetch les données
 const baseUrl = 'http://localhost:5678/api';
-
-// Sélection de la div gallery
 const gallery = document.querySelector(".gallery");
-// Sélection de la div "filters" pour les boutons filtre
 const filters = document.querySelector('.filters');
+const modal = document.querySelector(".modal "); 
+const modal1 = document.querySelector(".modal1"); 
+const modal2 = document.querySelector(".modal2"); 
+const modalContent = document.querySelector(".modal_content");
+const galleryModal = document.querySelector(".galleryModal");
+const openBtn = document.getElementById("modal_open");
+const closeBtn = document.getElementsByClassName("closeBtn")[0];
+const logOutBtn = document.getElementById("logOut");
+const previewContainer = document.getElementById('previewImageContainer');
+const addProjectInput = document.querySelector('#addProjectInput');
+const nameError = document.getElementById('nameError'); 
+const categoriesError = document.getElementById('categoriesError'); 
+const uploadImgContainer = document.getElementById('UploadImageContainer');
+const addProjectLogo = document.querySelector('addProjectLogo');
+const addProjectLabel = document.querySelector('addProjectLabel');
+const sectionGallery = document.querySelector('.gallery');
+const validateBtn = document.getElementById('validateBtn');
+const formUpload = document.querySelector('.form_upload'); 
+const projectName = document.getElementById("projectName")
+const projectCategory = document.getElementById("projectCategories")
+// Cette variable récupère la valeur du jeton d'authentification stocké dans le localStorage 
+const token = window.localStorage.token 
+
 
 // Récupération des projets et des catégories dans l'API
 async function fetchData() {
@@ -119,8 +139,7 @@ init();
 
 //////Fonction pour se deconnecter 
 
-// Cette variable récupère la valeur du jeton d'authentification stocké dans le localStorage 
-const token = window.localStorage.token 
+
 
 function logOut() {
     // verifie si  un token d'authentification est présent dans le local storage . si il est présent 
@@ -161,32 +180,6 @@ function logOut() {
   // ******************************************************************************
 // ***************************** FONCTION MODALE ******************************
 // ******************************************************************************
-
-
-//Variables globales
-
-const modal = document.querySelector(".modal "); 
-const modal1 = document.querySelector(".modal1"); 
-const modal2 = document.querySelector(".modal2"); 
-const modalContent = document.querySelector(".modal_content");
-const galleryModal = document.querySelector(".galleryModal");
-const openBtn = document.getElementById("modal_open");
-const closeBtn = document.getElementsByClassName("closeBtn")[0];
-const logOutBtn = document.getElementById("logOut");
-const previewContainer = document.getElementById('previewImageContainer');
-const addProjectInput = document.querySelector('#addProjectInput');
-const nameError = document.getElementById('nameError'); 
-const categoriesError = document.getElementById('categoriesError'); 
-const uploadImgContainer = document.getElementById('UploadImageContainer');
-const addProjectLogo = document.querySelector('addProjectLogo');
-const addProjectLabel = document.querySelector('addProjectLabel');
-const sectionGallery = document.querySelector('.gallery');
-const validateBtn = document.getElementById('validateBtn');
-const formUpload = document.querySelector('.form_upload'); 
-const projectName = document.getElementById("projectName")
-const projectCategory = document.getElementById("projectCategories")
-
-
 
 function main(){
   getGalleryProjects();
@@ -266,15 +259,10 @@ async function displayProjectsModal(){
     deleteIcon.src="./assets/icons/trash-can-solid.svg";
     //ajoute une classe CSS "deleteIcon" à l'icône de suppression.
     deleteIcon.classList.add("deleteIcon");
-
-    //Ajout d'un id unique à chaque icone de suppression
-
      //attribue un ID unique à chaque icône de suppression, en utilisant l'indice de la boucle.
     deleteIcon.id = `deleteIcon-${i}`;
     deleteIcon.alt = "icone suppression";
 
-
-    
     // Supprimer un projet de la galerie depuis la modale en cliquant sur l'icône de suppression
     deleteIcon.addEventListener('click', async (event) => {
     // Supprime la figure de l'API
@@ -322,9 +310,7 @@ const deleteSuccess = document.getElementById('deleteSuccess');
   if (!response.ok) {
     throw new Error('Request failed');
   }
-  else {
-    // si la réponse est un succès , un message est affiché dans la console , la galerie est vidée et la fonction 
-    // async displayProjects est appellé pour la mettre à jour 
+  else { 
     console.log('Photo supprimée avec succès');
     deleteSuccess.innerHTML = "Photo supprimée avec succès";
     sectionGallery.innerHTML = "";
@@ -353,12 +339,8 @@ function switchModal() {
 }
 
 
-
-//fleche retour pour revenir à la modal1
-
 // récupère l'element HTML avec l'ID Arrowback 
 const arrowBack = document.getElementById('arrowBack')                       
-// Cette ligne ajoute un écouteur d'événement "click" à l'élément "arrowBack".
 // Lorsque l'utilisateur clique sur cet élément, la fonction "switchModal2()" sera appelée.
 arrowBack.addEventListener ("click", switchModal2)
 function switchModal2() {
@@ -414,7 +396,6 @@ categories.then((data) => {
 /////// Preview image
 
  // ajoute un eventListener "change" à l'élément HTML avec l'ID "addProjectInput".
-  // Lorsque l'utilisateur sélectionne un fichier dans cet élément, la fonction suivante est exécutée.
   addProjectInput.addEventListener('change', function (event) {
     // récupère le premier fichier sélectionné par l'utilisateur dans l'élément "addProjectInput".
     const selectedFile = event.target.files[0];
@@ -422,8 +403,7 @@ categories.then((data) => {
     if (selectedFile) {
        // crée un nouvel objet "FileReader" qui permet de lire le contenu du fichier sélectionné.
       const reader = new FileReader();
-      // ajoute un écouteur d'événement "load" à l'objet "reader".
-        // Lorsque le fichier a fini d'être lu, la fonction suivante est exécutée.
+      // ajoute un écouteur d'événement "load" à l'objet "reader".Lorsque le fichier a fini d'être lu, la fonction suivante est exécutée.
       reader.addEventListener('load', function () {
         //crée un nouvel element img pour afficher le preview 
         const imgPreview = document.createElement('img');
@@ -443,7 +423,6 @@ categories.then((data) => {
   });
    // Cette fonction est définie pour afficher le contenu par défaut du conteneur d'aperçu.
   function displayPreviewContainer() {
-    //  définit le contenu HTML du conteneur d'aperçu, qui inclut une icône, un label et un champ de fichier caché.
     previewContainer.innerHTML =  `     <span><img src="assets/icons/addProject_Img.svg"  class="addProjectLogo" alt="modalLogo"></span>
     <label for="addProjectInput" class="addProjectLabel">+ Ajouter une photo</label>
     <input type="file" name="addProjectInput" id="addProjectInput" class="hidden">
