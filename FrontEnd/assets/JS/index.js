@@ -22,7 +22,6 @@ const validateBtn = document.getElementById('validateBtn');
 const formUpload = document.querySelector('.form_upload'); 
 const projectName = document.getElementById("projectName")
 const projectCategory = document.getElementById("projectCategories")
-// Cette variable récupère la valeur du jeton d'authentification stocké dans le localStorage 
 const token = window.localStorage.token 
 
 
@@ -162,8 +161,6 @@ function logOut() {
   function displayAdminView() {
   const adminView = document.querySelectorAll(".adminView");
   const sectionFilters = document.querySelector(".filters"); // Sélection de l'élément .filters
-
-  
   //si l utilisateur est connecté
   if (window.localStorage.getItem("token")) {
     //enleve les filtres
