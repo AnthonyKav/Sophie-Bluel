@@ -34,7 +34,7 @@ async function fetchData() {
       fetch(`${baseUrl}/categories`)
     ]);
 
-    // Vérifie si les réponses sont OK (code de statut 200-299)
+    // Vérifie si les réponses sont OK 
     if (!worksResponse.ok || !categoriesResponse.ok) {
       throw new Error('Network response was not ok');
     }
@@ -514,18 +514,25 @@ categories.then((data) => {
 
 
 // Fonction pour vérifier si tous les champs sont remplis
-function checkInputs() {
 
-  // Si tous les champs sont ok validateBtn est activé
-  if (projectName.value && projectCategory.value) {           
-    validateBtn.classList.remove('button__off');
-    validateBtn.classList.add('validateBtn');  
+function enabledOrDisabledSubmit() {
+  const selectedFile = addProjectInput.files[0];
 
+  if (!selectedFile || projectName.value.trim() === "" || projectCategory.value === "") {
+    validateBtn.disabled = true;
+    validateBtn.style.cursor = "not-allowed";
+    validateBtn.style.backgroundColor = "#d3d3d3";
   } else {
-    // Sinon,valideBtn est désactivé
-    validateBtn.classList.remove('validateBtn');
-    validateBtn.classList.add('button__off');
+    validateBtn.disabled = false;
+    validateBtn.style.cursor = "pointer";
+    validateBtn.style.backgroundColor = "#1d6154";
   }
 }
-projectName.addEventListener('input', checkInputs);
-projectCategory.addEventListener('input', checkInputs);
+
+// Ajouter des écouteurs d'événements pour les champs d'entrée et de sélection
+addProjectInput.addEventListener("change", enabledOrDisabledSubmit);
+projectName.addEventListener("input", enabledOrDisabledSubmit);
+projectCategory.addEventListener("input", enabledOrDisabledSubmit);
+
+// Appeler enabledOrDisabledSubmit une première fois pour initialiser l'état du bouton
+enabledOrDisabledSubmit();
