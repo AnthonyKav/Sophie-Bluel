@@ -429,6 +429,12 @@ categories.then((data) => {
   
 
 ///////// UPLOAD PROJECT
+validateBtn.addEventListener("click",function(){
+  validateBtn.classList.remove("validateBtn")
+  validateBtn.classList.add("button__off")
+  validateBtn.style.cursor = "not-allowed";
+ })
+
 
   async function uploadProject(event){
     //empêche le comportement par défaut du formulaire (rechargement de la page)
@@ -437,7 +443,7 @@ categories.then((data) => {
     const projectName = document.getElementById("projectName").value;
     const projectCategory = document.getElementById("projectCategories").value;
     const selectedFile = addProjectInput.files[0];
-
+   
   // Verifie si tous les champs sont remplis
     if (selectedFile) {
       const formData = new FormData();
@@ -458,7 +464,8 @@ categories.then((data) => {
         categoriesError.innerHTML = "Veuillez ajouter une catégorie";
        return;
       }
-
+      
+  
   //fetch POST request
       try {
         const response = await fetch("http://localhost:5678/api/works", {
@@ -474,6 +481,7 @@ categories.then((data) => {
          console.log("it works! Bravo !");
          nameError.innerHTML = "Image ajoutée avec succès";
 
+       
          // apres Upload d une image le formulaire est vide
          categoriesError.innerHTML = "";
          // reset image ici 
@@ -516,16 +524,18 @@ categories.then((data) => {
 // Fonction pour vérifier si tous les champs sont remplis
 
 function enabledOrDisabledSubmit() {
-  const selectedFile = addProjectInput.files[0];
+  const fileToSend = addProjectInput.files[0];
 
-  if (!selectedFile || projectName.value.trim() === "" || projectCategory.value === "") {
+  if (!fileToSend|| projectName.value.trim() === "" || projectCategory.value === "") {
     validateBtn.disabled = true;
     validateBtn.style.cursor = "not-allowed";
-    validateBtn.style.backgroundColor = "#d3d3d3";
+  
   } else {
     validateBtn.disabled = false;
     validateBtn.style.cursor = "pointer";
-    validateBtn.style.backgroundColor = "#1d6154";
+
+  validateBtn.classList.remove("button__off");
+  validateBtn.classList.add("validateBtn")
   }
 }
 
